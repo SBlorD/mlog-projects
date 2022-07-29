@@ -1,0 +1,180 @@
+# universalT2 (old logic)
+# NOTE TO SELF: remake this, i know man its painfull
+print "set safeLimit for item Needed"
+print "unit will only take needed item if"
+print "its more than SafeLimit value"
+set SafeLimit 1e3
+jump 6 always uctrl @this
+op add BindIndex BindIndex 1
+jump 157 greaterThanEq BindIndex 30
+ubind @flare
+sensor uctrld @unit @controlled
+jump 12 equal uctrld 0
+jump 5 always thisFlag null
+print "turn off to unbind unit"
+set RefUnit @unit
+ubind RefUnit
+jump 17 notEqual thisFlag null
+op mul thisf @mapw @thisx
+op add thisFlag thisf @thisy
+sensor on switch1 @enabled
+jump 152 equal on 0
+sensor udead @unit @dead
+jump 5 equal udead 1
+sensor uflag @unit @flag
+jump 24 equal uflag thisFlag
+jump 5 notEqual uflag 0
+ucontrol flag thisFlag 0 0 0 0
+ulocate building core 0 @copper corex corey found core
+jump 12 equal found 0
+sensor fcsili factory1 @silicon
+sensor fclead factory1 @lead
+sensor t2graph reconstructor1 @graphite
+sensor t2sili reconstructor1 @silicon
+sensor fccoal factory1 @coal
+sensor fctita factory1 @titanium
+sensor ucap @unit @totalItems
+sensor fc factory1 @config
+jump 71 equal fc @retusa
+jump 71 equal fc @risso
+jump 56 equal fc @mono
+jump 56 equal fc @flare
+jump 138 equal fc null
+jump 42 greaterThanEq fcsili 60
+jump 103 always fcsili 60
+jump 48 equal fc @crawler
+jump 46 equal fc @nova
+jump 52 greaterThanEq fclead 40
+jump 108 always fcsili 60
+jump 50 greaterThanEq fclead 40
+jump 108 always fcsili 60
+jump 52 greaterThanEq fccoal 20
+jump 98 always fcsili 60
+jump 52 greaterThanEq fctita 40
+jump 93 always fcsili 60
+jump 54 greaterThanEq t2graph 80
+jump 113 always fcsili 60
+jump 126 greaterThanEq t2sili 80
+jump 118 always fcsili 60
+sensor fcConfig factory1 @config
+jump 59 greaterThanEq fcsili 60
+jump 86 always fcsili 60
+jump 61 equal fcConfig @flare
+jump 63 always fcConfig @flare
+jump 52 greaterThanEq fcsili 60
+jump 126 always fcConfig @flare
+jump 138 equal fcConfig null
+sensor fclead1 factory1 @lead
+jump 52 greaterThanEq fclead1 30
+set droplead1 30
+op sub ItemTake1 droplead1 fclead1
+set Item @lead
+getlink drop 1
+jump 126 always ucap 0
+sensor fcConfig factory1 @config
+sensor fcglass factory1 @metaglass
+set silicap 40
+set glasscap 70
+jump 77 greaterThanEq fcglass 70
+jump 123 always fcglass 70
+jump 79 greaterThanEq fcsili 40
+jump 82 always fcglass 70
+jump 92 equal fcConfig @retusa
+jump 138 equal fcConfig null
+jump 52 greaterThanEq fcsili 40
+op sub ItemTake1 silicap fcsili
+set Item @silicon
+getlink drop 1
+jump 90 always ucap 0
+set dropsili) 60
+sensor fcsili1 factory1 @silicon
+op sub ItemTake1 dropsili) fcsili1
+set Item @silicon
+getlink drop 1
+jump 126 always ucap 0
+jump 52 greaterThanEq fctita 40
+set drop1tita 40
+op sub ItemTake1 drop1tita fctita
+set Item @titanium
+getlink drop 1
+jump 126 always ucap 0
+set drop1coal 20
+op sub ItemTake1 drop1coal fccoal
+set Item @coal
+getlink drop 1
+jump 126 always ucap 0
+set drop1sili 60
+op sub ItemTake1 drop1sili fcsili
+set Item @silicon
+getlink drop 1
+jump 126 always ucap 0
+set drop1lead 40
+op sub ItemTake1 drop1lead fclead
+set Item @lead
+getlink drop 1
+jump 126 always ucap 0
+set drop1graph 80
+op sub ItemTake1 drop1graph t2graph
+set Item @graphite
+getlink drop 2
+jump 126 always ucap 0
+set drop1sili( 80
+op sub ItemTake1 drop1sili( t2sili
+set Item @silicon
+getlink drop 2
+jump 126 always ucap 0
+op sub ItemTake1 glasscap fcglass
+set Item @metaglass
+getlink drop 1
+jump 142 greaterThan ucap 0
+sensor selItemInCore core Item
+jump 138 lessThan selItemInCore SafeLimit
+ucontrol stop corex corey 7 CoreWithin 0
+ucontrol within corex corey 7 CoreWithin 0
+jump 134 equal CoreWithin 0
+ucontrol itemTake core Item ItemTake1 0 0
+jump 135 always uctrl @this
+ucontrol approach corex corey 4.5 0 0
+sensor uCapreCheck @unit @totalItems
+jump 142 greaterThan uCapreCheck 0
+jump 12 always uctrl @this
+ucontrol approach @thisx @thisy 4.5 0 0
+sensor on switch1 @enabled
+jump 152 equal on 0
+jump 12 always uctrl @this
+jump 138 equal drop null
+sensor DropX drop @x
+sensor DropY drop @y
+sensor ufi @unit @firstItem
+jump 149 equal ufi Item
+ucontrol itemDrop @air 999 0 0 0
+jump 12 always uctrl @this
+ucontrol approach DropX DropY 3.5 0 0
+ucontrol itemDrop drop 999 0 0 0
+jump 12 always uctrl @this
+ucontrol approach corex corey 1 0 0
+ucontrol within corex corey 15 CoreWithinCheck 0
+jump 161 equal CoreWithinCheck 0
+sensor on switch1 @enabled
+jump 163 always on 1
+op add reBindTimer @time 4580
+set BindIndex 0
+jump 159 lessThan @time reBindTimer
+jump 0 always on 1
+ucontrol approach corex corey 1 0 0
+jump 12 always on 1
+ulocate building core 0 @copper corex corey found core
+ucontrol approach corex corey 1 0 0
+ucontrol itemDrop core 999 1 0 0
+sensor UnbindingCap @unit @totalItems
+jump 169 lessThanEq UnbindingCap 0
+jump 12 always on 1
+ucontrol flag 0 corey 0 0 0
+ubind 0
+jump 7 equal on 1
+jump 17 equal on 0
+print "Universal t2 Loader"
+print "Version 1.9 By lorD"
+print "[changelog]:"
+print "built-in new resource saver mode"
+print "resource saver is now configurable"

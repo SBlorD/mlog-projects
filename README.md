@@ -1,2 +1,0 @@
-# mlog-projects
-Mindustry logic
