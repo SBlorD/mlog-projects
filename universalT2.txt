@@ -1,5 +1,6 @@
 # universalT2 (old logic)
 # NOTE TO SELF: remake this, i know man its painfull
+# ANOTHER NOTE: remake this Unit binding part, :(
 print "set safeLimit for item Needed"
 print "unit will only take needed item if"
 print "its more than SafeLimit value"
